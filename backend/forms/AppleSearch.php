@@ -24,7 +24,6 @@ class AppleSearch extends Apple
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -37,9 +36,7 @@ class AppleSearch extends Apple
      */
     public function search($params)
     {
-        $query = Apple::find();
-
-        // add conditions that should always apply here
+        $query = Apple::find()->andWhere(['!=', 'status', Apple::STATUS_EATEN]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

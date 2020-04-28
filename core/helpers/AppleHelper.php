@@ -27,6 +27,7 @@ class AppleHelper
             Apple::STATUS_ON_TREE => 'на дереве',
             Apple::STATUS_IS_FALLEN => 'на земле',
             Apple::STATUS_ROTTEN => 'испорчено',
+            Apple::STATUS_EATEN => 'съедено',
         ];
     }
 

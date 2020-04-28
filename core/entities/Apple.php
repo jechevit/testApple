@@ -24,6 +24,7 @@ class Apple extends ActiveRecord
     const STATUS_ON_TREE = 0;
     const STATUS_IS_FALLEN = 1;
     const STATUS_ROTTEN = 2;
+    const STATUS_EATEN = 3;
 
     /**
      * @param $color
@@ -92,6 +93,10 @@ class Apple extends ActiveRecord
     {
         $balance = $this->eaten - $piece;
         $this->eaten = $balance;
+
+        if ($balance == 0) {
+            $this->status = self::STATUS_EATEN;
+        }
     }
 
     /**
