@@ -27,9 +27,9 @@ $this->title = 'My Yii Application';
         <?php /** @var Apple $item */
         foreach ($dataProvider->getModels() as $item): ?>
         <div class="col-lg-2">
-             <?= '<p class="lead">' . AppleHelper::colorName($item->color) . '</p>'?>
-             <?= '<p>' . AppleHelper::statusName($item->status) . '</p>'?>
-             <?= '<p>' . $item->eaten . '</p>'?>
+            <div class="<?= AppleHelper::colorName($item->color)?>_round"><?= $item->eaten?>%</div>
+
+            <?= '<p class="lead">' . AppleHelper::statusName($item->status) . '</p>'?>
 
              <?= Html::a('Сбросить яблоко', ['fall', 'id' => $item->id], ['class' => 'btn btn-success']) ?>
 

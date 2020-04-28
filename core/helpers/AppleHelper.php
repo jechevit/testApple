@@ -10,9 +10,9 @@ class AppleHelper
     public static function colorList(): array
     {
         return [
-            Apple::COLOR_GREEN => 'зеленое',
-            Apple::COLOR_RED => 'красное',
-            Apple::COLOR_YELLOW => 'желтое',
+            Apple::COLOR_GREEN => 'green',
+            Apple::COLOR_RED => 'red',
+            Apple::COLOR_YELLOW => 'yellow',
         ];
     }
 
