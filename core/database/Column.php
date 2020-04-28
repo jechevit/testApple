@@ -15,4 +15,9 @@ class Column
     const STATUS = 'status';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const COLOR = 'color';
+    const EATEN = 'eaten';
+    const IS_FALLEN = 'is_fallen';
+    const IS_ROTTEN = 'is_rotten';
+    const FALLEN_AT = 'fallen_at';
 }
