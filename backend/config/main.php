@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Apple admin',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
@@ -37,6 +38,10 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'backendUrlManager' => require __DIR__ . '/urlManager.php',
+        'urlManager' => function () {
+            return Yii::$app->get('backendUrlManager');
+        },
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
