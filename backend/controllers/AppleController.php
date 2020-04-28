@@ -10,6 +10,7 @@ use DomainException;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class AppleController extends Controller
 {
@@ -63,6 +64,30 @@ class AppleController extends Controller
         return $this->render('create', [
             'model' => $form,
         ]);
+    }
+
+    public function actionFall(int $id)
+    {
+        try {
+            $this->appleService->fall($id);
+        } catch (DomainException $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     */
+    public function actionRot(int $id)
+    {
+        try {
+            $this->appleService->rot($id);
+        } catch (DomainException $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+        return $this->redirect(['index']);
     }
 
     public function actionDelete(int $id)

@@ -20,4 +20,18 @@ class AppleHelper
     {
         return ArrayHelper::getValue(self::colorList(), $color);
     }
+
+    public static function statusList()
+    {
+        return [
+            Apple::STATUS_ON_TREE => 'на дереве',
+            Apple::STATUS_IS_FALLEN => 'на земле',
+            Apple::STATUS_ROTTEN => 'испорчено',
+        ];
+    }
+
+    public static function statusName($status): string
+    {
+        return ArrayHelper::getValue(self::statusList(), $status);
+    }
 }

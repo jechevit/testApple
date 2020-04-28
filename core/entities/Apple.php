@@ -9,7 +9,6 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $color
  * @property int $eaten
- * @property int $is_rotten
  * @property int $status
  * @property int $fallen_at
  * @property int $created_at
@@ -20,11 +19,9 @@ class Apple extends ActiveRecord
     const COLOR_GREEN = 110;
     const COLOR_YELLOW = 120;
 
-    const ON_TREE = 0;
-    const IS_FALLEN = 1;
-
-    const ROTTEN = 1;
-    const NOT_ROTTEN = 0;
+    const STATUS_ON_TREE = 0;
+    const STATUS_IS_FALLEN = 1;
+    const STATUS_ROTTEN = 2;
 
     /**
      * @param $color
@@ -37,8 +34,7 @@ class Apple extends ActiveRecord
         $apple = new static();
         $apple->color = $color;
         $apple->eaten = 100;
-        $apple->status = self::ON_TREE;
-        $apple->is_rotten = self::NOT_ROTTEN;
+        $apple->status = self::STATUS_ON_TREE;
         $apple->created_at = time();
         return $apple;
     }
@@ -52,7 +48,7 @@ class Apple extends ActiveRecord
             throw new \DomainException('apple has already fallen');
         }
         $this->fallen_at = time();
-        $this->status = self::IS_FALLEN;
+        $this->status = self::STATUS_IS_FALLEN;
     }
 
     /**
@@ -60,7 +56,7 @@ class Apple extends ActiveRecord
      */
     public function isFall(): bool
     {
-        return $this->eaten == self::IS_FALLEN;
+        return $this->status == self::STATUS_IS_FALLEN;
     }
 
     /**
@@ -68,7 +64,7 @@ class Apple extends ActiveRecord
      */
     public function isOnTree(): bool
     {
-        return $this->status == self::ON_TREE;
+        return $this->status == self::STATUS_ON_TREE;
     }
 
     /**
@@ -79,7 +75,7 @@ class Apple extends ActiveRecord
         if ($this->isRotten()){
             throw new \DomainException('apple has already rotten');
         }
-        return $this->is_rotten = self::ROTTEN;
+        return $this->status = self::STATUS_ROTTEN;
     }
 
     /**
@@ -87,7 +83,7 @@ class Apple extends ActiveRecord
      */
     public function isRotten(): bool
     {
-        return $this->is_rotten == self::ROTTEN;
+        return $this->status == self::STATUS_ROTTEN;
     }
 
     /**

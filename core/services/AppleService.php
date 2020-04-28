@@ -43,4 +43,23 @@ class AppleService
         $post = $this->appleRepository->get($id);
         $this->appleRepository->remove($post);
     }
+
+    public function fall(int $id)
+    {
+        $apple = $this->appleRepository->get($id);
+        $apple->fall();
+        $this->appleRepository->save($apple);
+    }
+
+    public function rot(int $id)
+    {
+        $apple = $this->appleRepository->get($id);
+
+        if ($apple->isOnTree()){
+            throw new \DomainException('Яблоко на дереве не портится');
+        }
+
+        $apple->rot();
+        $this->appleRepository->save($apple);
+    }
 }

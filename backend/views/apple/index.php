@@ -1,5 +1,7 @@
 <?php
 
+use core\entities\Apple;
+use core\helpers\AppleHelper;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 
@@ -20,8 +22,15 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
 
-        <?php foreach ($dataProvider->getModels() as $item): ?>
-             <?= $item->color?>
+        <?php /** @var Apple $item */
+        foreach ($dataProvider->getModels() as $item): ?>
+        <div class="col-lg-2">
+             <?= '<p class="lead">' . AppleHelper::colorName($item->color) . '</p>'?>
+             <?= '<p>' . AppleHelper::statusName($item->status) . '</p>'?>
+
+             <?= Html::a('Сбросить яблоко', ['fall', 'id' => $item->id])?>
+             <?= Html::a('Испортить яблоко', ['rot', 'id' => $item->id])?>
+        </div>
         <?php endforeach;?>
 
         <div class="row">
