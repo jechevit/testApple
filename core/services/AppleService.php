@@ -47,6 +47,11 @@ class AppleService
     public function fall(int $id)
     {
         $apple = $this->appleRepository->get($id);
+
+        if ($apple->isRotten()){
+            throw new \DomainException('Нельзя уронить то, что уже упало');
+        }
+
         $apple->fall();
         $this->appleRepository->save($apple);
     }
@@ -60,6 +65,26 @@ class AppleService
         }
 
         $apple->rot();
+        $this->appleRepository->save($apple);
+    }
+
+    public function eat(int $id, int $piece)
+    {
+        $apple = $this->appleRepository->get($id);
+
+        if ($apple->isOnTree()) {
+            throw new \DomainException('Нельзя откусить яблока с дерева');
+        }
+
+        if ($apple->isRotten()) {
+            throw new \DomainException('Нельзя есть гнилое яблоко');
+        }
+
+        if ($piece > $apple->eaten) {
+            throw new \DomainException('Нельзя съесть то чего нет');
+        }
+
+        $apple->eat($piece);
         $this->appleRepository->save($apple);
     }
 }

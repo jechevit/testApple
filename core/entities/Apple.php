@@ -15,6 +15,8 @@ use yii\db\ActiveRecord;
  */
 class Apple extends ActiveRecord
 {
+    const WHOLE_APPLE= 100;
+
     const COLOR_RED = 100;
     const COLOR_GREEN = 110;
     const COLOR_YELLOW = 120;
@@ -33,7 +35,7 @@ class Apple extends ActiveRecord
     {
         $apple = new static();
         $apple->color = $color;
-        $apple->eaten = 100;
+        $apple->eaten = self::WHOLE_APPLE;
         $apple->status = self::STATUS_ON_TREE;
         $apple->created_at = time();
         return $apple;
@@ -45,7 +47,7 @@ class Apple extends ActiveRecord
     public function fall(): void
     {
         if ($this->isFall()){
-            throw new \DomainException('apple has already fallen');
+            throw new \DomainException('Яблоко уже упало');
         }
         $this->fallen_at = time();
         $this->status = self::STATUS_IS_FALLEN;
@@ -68,14 +70,14 @@ class Apple extends ActiveRecord
     }
 
     /**
-     * @return int
+     * @return void
      */
-    public function rot(): int
+    public function rot(): void
     {
         if ($this->isRotten()){
-            throw new \DomainException('apple has already rotten');
+            throw new \DomainException('Яблоко уже испортилось');
         }
-        return $this->status = self::STATUS_ROTTEN;
+        $this->status = self::STATUS_ROTTEN;
     }
 
     /**
@@ -84,6 +86,12 @@ class Apple extends ActiveRecord
     public function isRotten(): bool
     {
         return $this->status == self::STATUS_ROTTEN;
+    }
+
+    public function eat(int $piece)
+    {
+        $balance = $this->eaten - $piece;
+        $this->eaten = $balance;
     }
 
     /**
