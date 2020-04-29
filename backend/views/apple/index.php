@@ -13,8 +13,6 @@ use yii\widgets\LinkPager;
 
 $this->title = 'My Yii Application';
 
-$apples = array_chunk($dataProvider->getModels(), 6);
-
 if ($dataProvider->totalCount > 18){
     $pages = new Pagination(['totalCount' => $dataProvider->totalCount  , 'pageSize' => 18]);
 }
@@ -31,21 +29,18 @@ if ($dataProvider->totalCount > 18){
     </div>
 
     <div class="body-content">
-
-        <?php foreach ($apples as $row): ?>
         <div class="row">
-            <?php /** @var Apple $item */
-            foreach ($row as $item):?>
-                <div class="col-lg-2">
-                    <div class="<?= AppleHelper::colorName($item->color)?>_round"><?= $item->eaten?>%</div>
-                    <?= '<p class="lead">' . AppleHelper::statusName($item->status) . '</p>'?>
-
-                    <?= AppleButtonsPanel::widget(['model' => $item, 'form' => $model])?>
+            <?php /** @var Apple $apple */
+            foreach ($dataProvider->getModels() as $apple):?>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <p class="lead"><?= AppleHelper::statusName($apple->status) ?></p>
+                    <div class="round <?= AppleHelper::colorName($apple->color)?>_round">
+                        <?= $apple->eaten?>%
+                    </div>
+                    <?= AppleButtonsPanel::widget(['model' => $apple, 'form' => $model])?>
                 </div>
             <?php endforeach;?>
         </div>
-        <?php endforeach;?>
-
         <?php if (isset($pages)):?>
             <?= LinkPager::widget([
                 'pagination' => $pages,
