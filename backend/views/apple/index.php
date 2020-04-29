@@ -10,6 +10,9 @@ use yii\helpers\Html;
 /** @var $dataProvider ActiveDataProvider */
 
 $this->title = 'My Yii Application';
+
+$apples = array_chunk($dataProvider->getModels(), 6);
+
 ?>
 <div class="site-index">
 
@@ -23,17 +26,18 @@ $this->title = 'My Yii Application';
 
     <div class="body-content">
 
-        <?php /** @var Apple $item */
-        foreach ($dataProvider->getModels() as $item): ?>
-        <div class="col-lg-2">
-            <div class="<?= AppleHelper::colorName($item->color)?>_round"><?= $item->eaten?>%</div>
+        <?php foreach ($apples as $row): ?>
+        <div class="row">
+            <?php /** @var Apple $item */
+            foreach ($row as $item):?>
+                <div class="col-lg-2">
+                    <div class="<?= AppleHelper::colorName($item->color)?>_round"><?= $item->eaten?>%</div>
+                    <?= '<p class="lead">' . AppleHelper::statusName($item->status) . '</p>'?>
 
-            <?= '<p class="lead">' . AppleHelper::statusName($item->status) . '</p>'?>
-
-            <?= AppleButtonsPanel::widget(['model' => $item, 'form' => $model])?>
-
+                    <?= AppleButtonsPanel::widget(['model' => $item, 'form' => $model])?>
+                </div>
+            <?php endforeach;?>
         </div>
         <?php endforeach;?>
-
     </div>
 </div>
