@@ -2,10 +2,17 @@
 
 use core\entities\Apple;
 use yii\bootstrap\Modal;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var $item Apple */
+/** @var $page int | null */
+
+$attributes = ['apple/eat', 'id' => $item->id];
+if (isset($page)){
+    $attributes = ArrayHelper::merge($attributes, ['page' => $page]);
+}
 
 Modal::begin([
     'header' => '<h2>Hello world</h2>',
@@ -17,7 +24,7 @@ Modal::begin([
 ])?>
 <?php $form = ActiveForm::begin([
     'id' => 'contact-form',
-    'action' => ['apple/eat', 'id' => $item->id]
+    'action' => $attributes
 ]); ?>
 
 <?= $form->field($model, 'piece')->textInput(['autofocus' => true]) ?>

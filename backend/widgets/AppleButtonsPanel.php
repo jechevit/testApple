@@ -4,7 +4,9 @@ namespace backend\widgets;
 
 use core\entities\Apple;
 use core\forms\AppleEatForm;
+use Yii;
 use yii\base\Widget;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 class AppleButtonsPanel extends Widget
@@ -32,9 +34,14 @@ class AppleButtonsPanel extends Widget
      * @var mixed|string
      */
     private $panel = '';
+    /**
+     * @var mixed
+     */
+    private $paginator;
 
     public function init()
     {
+        $this->paginator = $this->setPage();
         $this->populatePanel();
     }
 
@@ -58,17 +65,42 @@ class AppleButtonsPanel extends Widget
 
     private function getOnTreePanel()
     {
-        $this->panel .= Html::a('Сорвать', ['fall', 'id' => $this->model->id], $this->defaultOptions);
+        $this->panel .= $this->renderButton('Сорвать', 'fall');
     }
 
     private function getFallPanel()
     {
-        $this->panel .= $this->render('modal', ['item' => $this->model, 'model' => $this->form]);
-        $this->panel .= Html::a('Испортить', ['rot', 'id' => $this->model->id], $this->defaultOptions);
+
+        $this->panel .= $this->render('modal', [
+            'item' => $this->model,
+            'model' => $this->form,
+            'page' => isset($this->paginator) ? $this->paginator : null,
+        ]);
+        $this->panel .= $this->renderButton('Испортить', 'rot');
     }
 
     private function getRottenPanel()
     {
-        $this->panel .= Html::a('Выбросить', ['delete', 'id' => $this->model->id], $this->deleteOptions);
+        $this->panel .= $this->renderButton('Выбросить', 'delete', true);
+    }
+
+    private function renderButton(string $title, string $url, $options = false)
+    {
+        $url = [$url, 'id' => $this->model->id];
+
+        if (isset($this->paginator)){
+            $url = ArrayHelper::merge($url, ['page' => $this->paginator]);
+        }
+
+        return Html::a($title, $url, isset($options) ? $this->deleteOptions : $this->defaultOptions
+        );
+    }
+
+    private function setPage()
+    {
+        if (isset(Yii::$app->request->queryParams['page'])){
+            return Yii::$app->request->queryParams['page'];
+        }
+        return null;
     }
 }

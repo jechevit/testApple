@@ -29,7 +29,7 @@ class Apple extends ActiveRecord
     const STATUS_ROTTEN = 2;
     const STATUS_EATEN = 3;
 
-    const HOURS_TO_ROT = 4;
+    const HOURS_TO_ROT = 1;
 
     /**
      * @param $color

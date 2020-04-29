@@ -13,6 +13,7 @@ use Yii;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -86,7 +87,7 @@ class AppleController extends Controller
         ]);
     }
 
-    public function actionGenerate($quantity = 10)
+    public function actionGenerate(int $quantity = 10)
     {
         try {
             $this->appleService->generate($quantity);
@@ -119,10 +120,11 @@ class AppleController extends Controller
 
     /**
      * @param int $id
+     * @param int|null $page
      * @return Response
      * @throws NotFoundHttpException
      */
-    public function actionFall(int $id)
+    public function actionFall(int $id, int $page = null)
     {
         $apple = $this->findModel($id);
         try {
@@ -130,15 +132,31 @@ class AppleController extends Controller
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        return $this->redirect(['index']);
+
+        return $this->redirect($this->getAttributes($page));
+    }
+
+    /**
+     * @param int|null $page
+     * @return array|string[]
+     */
+    public function getAttributes(int $page = null)
+    {
+        $attribute = ['index'];
+        if (isset($page)){
+            $attribute = ArrayHelper::merge($attribute, ['page' => $page]);
+        }
+        return $attribute;
     }
 
     /**
      * @param int $id
+     * @param int $page
      * @return Response
+     * @throws NotFoundHttpException
      * @throws Exception
      */
-    public function actionRot(int $id)
+    public function actionRot(int $id, int $page = null)
     {
         $apple = $this->findModel($id);
         try {
@@ -146,15 +164,16 @@ class AppleController extends Controller
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        return $this->redirect(['index']);
+        return $this->redirect($this->getAttributes($page));
     }
 
     /**
      * @param int $id
+     * @param int|null $page
      * @return Response
      * @throws NotFoundHttpException
      */
-    public function actionEat(int $id)
+    public function actionEat(int $id, int $page = null)
     {
         $apple = $this->findModel($id);
 
@@ -168,7 +187,7 @@ class AppleController extends Controller
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        return $this->redirect(['index']);
+        return $this->redirect($this->getAttributes($page));
     }
 
     /**
