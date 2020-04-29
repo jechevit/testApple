@@ -1,6 +1,7 @@
 <?php
 
 use core\entities\Apple;
+use core\forms\AppleEatForm;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -8,6 +9,7 @@ use yii\widgets\ActiveForm;
 
 /** @var $item Apple */
 /** @var $page int | null */
+/** @var $model AppleEatForm */
 
 $attributes = ['apple/eat', 'id' => $item->id];
 if (isset($page)){
@@ -15,7 +17,7 @@ if (isset($page)){
 }
 
 Modal::begin([
-    'header' => '<h2>Hello world</h2>',
+    'header' => '<h2>Укажите сколько вы хотите съесть в %</h2>',
     'toggleButton' => [
         'label' => 'Откусить яблоко',
         'tag' => 'button',

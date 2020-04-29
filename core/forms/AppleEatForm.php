@@ -3,7 +3,6 @@
 
 namespace core\forms;
 
-
 use yii\base\Model;
 
 class AppleEatForm extends Model
@@ -14,6 +13,13 @@ class AppleEatForm extends Model
     {
         return [
             ['piece', 'integer'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'piece' => 'Кусочек',
         ];
     }
 }
