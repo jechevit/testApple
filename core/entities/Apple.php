@@ -3,6 +3,9 @@
 namespace core\entities;
 
 use core\database\Table;
+use DateTimeImmutable;
+use DomainException;
+use Exception;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,6 +29,8 @@ class Apple extends ActiveRecord
     const STATUS_ROTTEN = 2;
     const STATUS_EATEN = 3;
 
+    const HOURS_TO_ROT = 4;
+
     /**
      * @param $color
      * @return static
@@ -48,7 +53,7 @@ class Apple extends ActiveRecord
     public function fall(): void
     {
         if ($this->isFall()){
-            throw new \DomainException('Яблоко уже упало');
+            throw new DomainException('Яблоко уже упало');
         }
         $this->fallen_at = time();
         $this->status = self::STATUS_IS_FALLEN;
@@ -72,13 +77,34 @@ class Apple extends ActiveRecord
 
     /**
      * @return void
+     * @throws Exception
      */
     public function rot(): void
     {
         if ($this->isRotten()){
-            throw new \DomainException('Яблоко уже испортилось');
+            throw new DomainException('Яблоко уже испортилось');
+        }
+
+        if (!$this->toRot()){
+            throw new DomainException('Яблоко еще не может испортиться');
         }
         $this->status = self::STATUS_ROTTEN;
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     */
+    private function toRot(): bool
+    {
+        $timeFallen = (new DateTimeImmutable())->setTimestamp($this->fallen_at);
+        $now = new DateTimeImmutable('now');
+        $interval = $now->diff($timeFallen);
+
+        if ($interval->h >= self::HOURS_TO_ROT){
+            return true;
+        }
+        return false;
     }
 
     /**
