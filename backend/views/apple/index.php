@@ -4,7 +4,9 @@ use backend\widgets\AppleButtonsPanel;
 use core\entities\Apple;
 use core\helpers\AppleHelper;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 
 /* @var $this yii\web\View */
 /** @var $dataProvider ActiveDataProvider */
@@ -13,6 +15,9 @@ $this->title = 'My Yii Application';
 
 $apples = array_chunk($dataProvider->getModels(), 6);
 
+if ($dataProvider->totalCount > 18){
+    $pages = new Pagination(['totalCount' => $dataProvider->totalCount  , 'pageSize' => 18]);
+}
 ?>
 <div class="site-index">
 
@@ -22,6 +27,7 @@ $apples = array_chunk($dataProvider->getModels(), 6);
         <p class="lead">You have successfully created your Yii-powered application.</p>
 
         <?= Html::a('Создать яблоко', ['apple/create'], ['class' => "btn btn-success"]) ?>
+        <?= Html::a('Сгенерировать', ['apple/generate'], ['class' => "btn btn-success"]) ?>
     </div>
 
     <div class="body-content">
@@ -39,5 +45,11 @@ $apples = array_chunk($dataProvider->getModels(), 6);
             <?php endforeach;?>
         </div>
         <?php endforeach;?>
+
+        <?php if (isset($pages)):?>
+            <?= LinkPager::widget([
+                'pagination' => $pages,
+            ]); ?>
+        <?php endif;?>
     </div>
 </div>

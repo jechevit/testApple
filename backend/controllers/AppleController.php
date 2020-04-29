@@ -8,6 +8,7 @@ use core\forms\AppleCreateForm;
 use core\forms\AppleEatForm;
 use core\services\AppleService;
 use DomainException;
+use Exception;
 use Yii;
 use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
@@ -75,6 +76,7 @@ class AppleController extends Controller
 
     /**
      * @param int $id
+     * @return string
      * @throws NotFoundHttpException
      */
     public function actionView(int $id)
@@ -82,6 +84,16 @@ class AppleController extends Controller
         return $this->render('view', [
             'apple' => $this->findModel($id),
         ]);
+    }
+
+    public function actionGenerate($quantity = 10)
+    {
+        try {
+            $this->appleService->generate($quantity);
+        } catch (DomainException $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+        return $this->redirect(['index']);
     }
 
     /**
@@ -114,7 +126,7 @@ class AppleController extends Controller
     {
         $apple = $this->findModel($id);
         try {
-            $this->appleService->fall($id);
+            $this->appleService->fall($apple->id);
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
@@ -124,11 +136,13 @@ class AppleController extends Controller
     /**
      * @param int $id
      * @return Response
+     * @throws Exception
      */
     public function actionRot(int $id)
     {
+        $apple = $this->findModel($id);
         try {
-            $this->appleService->rot($id);
+            $this->appleService->rot($apple->id);
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
@@ -138,16 +152,19 @@ class AppleController extends Controller
     /**
      * @param int $id
      * @return Response
+     * @throws NotFoundHttpException
      */
     public function actionEat(int $id)
     {
+        $apple = $this->findModel($id);
+
         if (!isset(Yii::$app->request->bodyParams['AppleEatForm']['piece'])){
             return $this->redirect(['index']);
         }
         $piece = intval(Yii::$app->request->bodyParams['AppleEatForm']['piece']);
 
         try {
-            $this->appleService->eat($id, $piece);
+            $this->appleService->eat($apple->id, $piece);
         } catch (DomainException $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
