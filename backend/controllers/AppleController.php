@@ -10,6 +10,8 @@ use core\services\AppleService;
 use DomainException;
 use Yii;
 use yii\db\StaleObjectException;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -29,6 +31,30 @@ class AppleController extends Controller
     {
         parent::__construct($id, $module, $config);
         $this->appleService = $appleService;
+    }
+
+    /**
+     * @return array|array[]
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['accessPanel'],
+                    ]
+                ]
+            ],
+        ];
     }
 
     /**
@@ -109,6 +135,10 @@ class AppleController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * @param int $id
+     * @return Response
+     */
     public function actionEat(int $id)
     {
         if (!isset(Yii::$app->request->bodyParams['AppleEatForm']['piece'])){

@@ -11,7 +11,10 @@ return [
     'name' => 'Apple admin',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'common\bootstrap\SetUp',
+    ],
     'modules' => [],
     'components' => [
         'request' => [
@@ -55,6 +58,20 @@ return [
             ],
         ],
         */
+    ],
+    'as access' => [
+        'class' => 'yii\filters\AccessControl',
+        'except' => [
+            'auth/login',
+            'auth/logout',
+            'site/error'
+        ],
+        'rules' => [
+            [
+                'allow' => true,
+                'roles' => ['accessPanel'],
+            ],
+        ],
     ],
     'params' => $params,
 ];
