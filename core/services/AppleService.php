@@ -25,7 +25,7 @@ class AppleService
         $this->appleRepository = $appleRepository;
     }
 
-    public function create(AppleCreateForm $form)
+    public function create(AppleCreateForm $form): Apple
     {
         $apple = Apple::create($form->color);
         $this->appleRepository->save($apple);
@@ -38,13 +38,13 @@ class AppleService
      * @throws \Throwable
      * @throws StaleObjectException
      */
-    public function remove(int $id)
+    public function remove(int $id): void
     {
         $post = $this->appleRepository->get($id);
         $this->appleRepository->remove($post);
     }
 
-    public function fall(int $id)
+    public function fall(int $id): void
     {
         $apple = $this->appleRepository->get($id);
 
@@ -56,7 +56,7 @@ class AppleService
         $this->appleRepository->save($apple);
     }
 
-    public function rot(int $id)
+    public function rot(int $id): void
     {
         $apple = $this->appleRepository->get($id);
 
@@ -68,7 +68,7 @@ class AppleService
         $this->appleRepository->save($apple);
     }
 
-    public function eat(int $id, int $piece)
+    public function eat(int $id, int $piece): void
     {
         $apple = $this->appleRepository->get($id);
 

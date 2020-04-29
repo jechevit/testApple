@@ -89,7 +89,7 @@ class Apple extends ActiveRecord
         return $this->status == self::STATUS_ROTTEN;
     }
 
-    public function eat(int $piece)
+    public function eat(int $piece): void
     {
         $balance = $this->eaten - $piece;
         $this->eaten = $balance;
@@ -102,7 +102,7 @@ class Apple extends ActiveRecord
     /**
      * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return Table::APPLES;
     }

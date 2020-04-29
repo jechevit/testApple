@@ -20,9 +20,13 @@ class AppleButtonsPanel extends Widget
     public $form;
 
     /**
-     * @var string[]
+     * @var array
      */
     public $defaultOptions = ['class' => 'btn btn-primary'];
+    public $deleteOptions = [
+        'class' => 'btn btn-primary',
+        'data-method' => 'post',
+    ];
 
     /**
      * @var mixed|string
@@ -65,6 +69,6 @@ class AppleButtonsPanel extends Widget
 
     private function getRottenPanel()
     {
-        $this->panel .= Html::a('Выбросить', ['delete', 'id' => $this->model->id], $this->defaultOptions);
+        $this->panel .= Html::a('Выбросить', ['delete', 'id' => $this->model->id], $this->deleteOptions);
     }
 }
