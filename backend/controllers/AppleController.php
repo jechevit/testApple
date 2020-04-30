@@ -89,6 +89,7 @@ class AppleController extends Controller
 
     /**
      * @return string|Response
+     * @throws Exception
      */
     public function actionCreate()
     {
@@ -106,6 +107,25 @@ class AppleController extends Controller
         return $this->render('create', [
             'model' => $form,
         ]);
+    }
+
+    /**
+     * @return Response
+     * @throws Exception
+     */
+    public function actionGenerate()
+    {
+        if (!isset(Yii::$app->request->bodyParams['GenerateForm']['quantity'])){
+            return $this->redirect(['index']);
+        }
+
+        $quantity = Yii::$app->request->bodyParams['GenerateForm']['quantity'];
+        try {
+            $this->appleService->generate($quantity);
+        } catch (DomainException $e) {
+            Yii::$app->session->setFlash('error', $e->getMessage());
+        }
+        return $this->redirect(['index']);
     }
 
     /**
