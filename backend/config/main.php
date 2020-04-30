@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'language' => 'ru-Ru', 
     'name' => 'Apple admin',
     'timeZone' => 'Europe/Moscow',
     'basePath' => dirname(__DIR__),

@@ -11,6 +11,7 @@ class AppleCreateForm extends Model
     public function rules()
     {
         return [
+            ['color', 'required'],
             ['color', 'string']
         ];
     }

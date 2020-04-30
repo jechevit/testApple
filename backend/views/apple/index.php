@@ -20,12 +20,13 @@ if ($dataProvider->totalCount > 18){
 <div class="site-index">
 
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
+        <h1>Добро пожаловать!</h1>
 
-        <p class="lead">You have successfully created your Yii-powered application.</p>
+        <p >На этой странице вы сможете сгенерировать разное количество яблок от 1 до 100.
+            Сорвать, испортить, съесть или выбросить.</p>
 
         <?= Html::a('Создать яблоко', ['apple/create'], ['class' => "btn btn-success"]) ?>
-        <?= Html::a('Сгенерировать', ['apple/generate'], ['class' => "btn btn-success"]) ?>
+        <?= $this->render('_modal') ?>
     </div>
 
     <div class="body-content">

@@ -87,16 +87,6 @@ class AppleController extends Controller
         ]);
     }
 
-    public function actionGenerate(int $quantity = 10)
-    {
-        try {
-            $this->appleService->generate($quantity);
-        } catch (DomainException $e) {
-            Yii::$app->session->setFlash('error', $e->getMessage());
-        }
-        return $this->redirect(['index']);
-    }
-
     /**
      * @return string|Response
      */

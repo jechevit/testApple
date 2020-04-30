@@ -12,7 +12,8 @@ class AppleEatForm extends Model
     public function rules()
     {
         return [
-            ['piece', 'integer'],
+            ['piece', 'required'],
+            ['piece', 'integer', 'min' => 0, 'max' => 100],
         ];
     }
 
