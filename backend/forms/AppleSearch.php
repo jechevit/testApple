@@ -42,6 +42,9 @@ class AppleSearch extends Apple
             'query' => $query,
             'pagination' => [
                 'pageSize' => 18,
+            ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC]
             ]
         ]);
 

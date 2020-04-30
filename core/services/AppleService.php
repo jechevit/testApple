@@ -37,13 +37,16 @@ class AppleService
      * @param AppleCreateForm $form
      * @param bool $is_generator
      * @return Apple
+     * @throws Exception
      */
     public function create(AppleCreateForm $form = null, bool $is_generator = false): Apple
     {
-        if (!$is_generator){
-            $apple = Apple::create($form->color);
-        } else {
+        if ($is_generator){
             $apple = Apple::create($this->randomColor());
+            $apple->setRandomCreatedAt();
+            $apple->randomStatus();
+        } else {
+            $apple = Apple::create($form->color);
         }
         $this->appleRepository->save($apple);
 
@@ -116,6 +119,10 @@ class AppleService
         $this->appleRepository->save($apple);
     }
 
+    /**
+     * @param int $quantity
+     * @throws Exception
+     */
     public function generate(int $quantity)
     {
         for ($i = 1; $i <= $quantity; $i++){
@@ -125,6 +132,9 @@ class AppleService
         }
     }
 
+    /**
+     * @return mixed|string
+     */
     private function randomColor()
     {
         return array_rand(AppleHelper::colorList());

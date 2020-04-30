@@ -136,6 +136,10 @@ a.desc:after {
     margin-bottom: 10px;
 }
 
+.lead_info {
+    font-size: 12px;
+}
+
 .round {
     width: 100px;
     height: 100px;

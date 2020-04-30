@@ -11,7 +11,7 @@ use yii\widgets\LinkPager;
 /* @var $this yii\web\View */
 /** @var $dataProvider ActiveDataProvider */
 
-$this->title = 'My Yii Application';
+$this->title = 'Яблоки';
 
 if ($dataProvider->totalCount > 18){
     $pages = new Pagination(['totalCount' => $dataProvider->totalCount  , 'pageSize' => 18]);
@@ -34,6 +34,10 @@ if ($dataProvider->totalCount > 18){
             foreach ($dataProvider->getModels() as $apple):?>
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <p class="lead"><?= AppleHelper::statusName($apple->status) ?></p>
+                    <p class="lead_info">Создано: <?= Yii::$app->formatter->asDatetime($apple->created_at, 'php:d.m.yy H:i:s') ?></p>
+                    <?php if ($apple->isFall() || $apple->isRotten()):?>
+                        <p class="lead_info">Упало: <?= Yii::$app->formatter->asDatetime($apple->fallen_at, 'php:d.m.yy H:i:s') ?></p>
+                    <?php endif;?>
                     <div class="round <?= AppleHelper::colorName($apple->color)?>_round">
                         <?= $apple->eaten?>%
                     </div>

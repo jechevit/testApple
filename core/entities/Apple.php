@@ -3,6 +3,7 @@
 namespace core\entities;
 
 use core\database\Table;
+use core\helpers\AppleHelper;
 use DateTimeImmutable;
 use DomainException;
 use Exception;
@@ -85,7 +86,7 @@ class Apple extends ActiveRecord
             throw new DomainException('Яблоко уже испортилось');
         }
 
-        if (!$this->toRot()){
+        if (!$this->canToRot()){
             throw new DomainException('Яблоко еще не может испортиться');
         }
         $this->status = self::STATUS_ROTTEN;
@@ -95,10 +96,11 @@ class Apple extends ActiveRecord
      * @return bool
      * @throws Exception
      */
-    private function toRot(): bool
+    private function canToRot(): bool
     {
         $timeFallen = (new DateTimeImmutable())->setTimestamp($this->fallen_at);
         $now = new DateTimeImmutable('now');
+
         $interval = $now->diff($timeFallen);
 
         if ($interval->h >= self::HOURS_TO_ROT){
@@ -123,6 +125,38 @@ class Apple extends ActiveRecord
         if ($balance == 0) {
             $this->status = self::STATUS_EATEN;
         }
+    }
+
+    /**
+     * Create random data for created_at field
+     */
+    public function setRandomCreatedAt(): void
+    {
+        $this->created_at = strtotime('-' . rand(0, 24) . 'hours');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function randomStatus(): void
+    {
+        $this->status = $this->getRandomStatus();
+        if ($this->isFall()){
+            $this->setFallenAt();
+            if ($this->canToRot()){
+                $this->status = $this->getRandomStatus(true);
+            }
+        }
+    }
+
+    private function setFallenAt()
+    {
+        $this->fallen_at = rand($this->created_at, time());
+    }
+
+    private function getRandomStatus(bool $canRoot = false)
+    {
+        return array_rand(AppleHelper::statusListForRandom($canRoot));
     }
 
     /**
