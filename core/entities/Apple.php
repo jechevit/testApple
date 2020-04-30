@@ -117,6 +117,9 @@ class Apple extends ActiveRecord
         return $this->status == self::STATUS_ROTTEN;
     }
 
+    /**
+     * @param int $piece
+     */
     public function eat(int $piece): void
     {
         $balance = $this->eaten - $piece;
@@ -149,12 +152,16 @@ class Apple extends ActiveRecord
         }
     }
 
-    private function setFallenAt()
+    private function setFallenAt(): void
     {
         $this->fallen_at = rand($this->created_at, time());
     }
 
-    private function getRandomStatus(bool $canRoot = false)
+    /**
+     * @param bool $canRoot
+     * @return array
+     */
+    private function getRandomStatus(bool $canRoot = false): array
     {
         return array_rand(AppleHelper::statusListForRandom($canRoot));
     }
