@@ -2,27 +2,75 @@
 
 namespace console\controllers;
 
+use core\repositories\UserRepository;
 use Yii;
-use yii\base\Exception;
 use yii\console\Controller;
+use yii\rbac\ManagerInterface;
 
 class RoleController extends Controller
 {
+    const ACCESS_PANEL = 'accessPanel';
+    const ADMIN = 'admin';
+
     /**
-     * @throws Exception
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $auth;
+
+    public function __construct($id, $module, UserRepository $userRepository, $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->userRepository = $userRepository;
+        $this->auth = Yii::$app->authManager;
+    }
+
+    /**
+     * @throws \Exception
      */
     public function actionRole()
     {
-        $auth = Yii::$app->authManager;
-
-        $access = $auth->createPermission('accessPanel');
+        $access = $this->auth->createPermission(self::ACCESS_PANEL);
         $access->description = 'Доступ в админку';
-        $auth->add($access);
+        $this->auth->add($access);
 
-        $admin = $auth->createRole('admin');
+        $admin = $this->auth->createRole(self::ADMIN);
         $admin->description = 'Admin';
-        $auth->add($admin);
+        $this->auth->add($admin);
 
-        $auth->addChild($admin, $access);
+        $this->auth->addChild($admin, $access);
+    }
+
+    /**
+     * @param int $id
+     * @throws \Exception
+     */
+    public function actionAdd(int $id)
+    {
+        $user = $this->userRepository->get($id);
+
+        $role = $this->auth->getRole(self::ADMIN);
+        $this->auth->assign($role, $user->id);
+    }
+
+    /**
+     * @param int $id
+     * @param string|null $role
+     */
+    public function actionDelete(int $id, string $role = null)
+    {
+        $user = $this->userRepository->get($id);
+
+        if (isset($role)){
+            $role = $this->auth->getRole($role);
+        } else {
+            $role = $this->auth->getRole(self::ADMIN);
+        }
+
+        $this->auth->revoke($role, $user->id);
     }
 }
