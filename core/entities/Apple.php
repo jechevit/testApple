@@ -159,9 +159,9 @@ class Apple extends ActiveRecord
 
     /**
      * @param bool $canRoot
-     * @return array
+     * @return int
      */
-    private function getRandomStatus(bool $canRoot = false): array
+    private function getRandomStatus(bool $canRoot = false): int
     {
         return array_rand(AppleHelper::statusListForRandom($canRoot));
     }
